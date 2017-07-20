@@ -4,5 +4,5 @@
   "env": {
     "NODE_ENV": "development"
   },
-  "ext": "js json hjs jade",
+  "ext": "js json hjs jade"
 }

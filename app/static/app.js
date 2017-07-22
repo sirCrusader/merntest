@@ -53,37 +53,37 @@ var IssueRow = function IssueRow(props) {
         React.createElement(
             'th',
             null,
-            issue.id
+            props.issue.id
         ),
         React.createElement(
             'th',
             null,
-            issue.status
+            props.issue.status
         ),
         React.createElement(
             'th',
             null,
-            issue.owner
+            props.issue.owner
         ),
         React.createElement(
             'th',
             null,
-            issue.created.toDateString()
+            props.issue.created ? props.issue.created.toDateString() : ''
         ),
         React.createElement(
             'th',
             null,
-            issue.effort
+            props.issue.effort
         ),
         React.createElement(
             'th',
             null,
-            issue.completionDate ? issue.completionDate.toDateString() : ''
+            props.issue.completionDate ? props.issue.completionDate.toDateString() : ''
         ),
         React.createElement(
             'th',
             null,
-            issue.title
+            props.issue.title
         )
     );
 };

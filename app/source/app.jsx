@@ -25,13 +25,13 @@ class IssueFilter extends React.Component {
 
 const IssueRow = (props) => (
     <tr>
-        <th>{issue.id}</th>
-        <th>{issue.status}</th>
-        <th>{issue.owner}</th>
-        <th>{issue.created.toDateString()}</th>
-        <th>{issue.effort}</th>
-        <th>{issue.completionDate ? issue.completionDate.toDateString() : ''}</th>
-        <th>{issue.title}</th>
+        <th>{props.issue.id}</th>
+        <th>{props.issue.status}</th>
+        <th>{props.issue.owner}</th>
+        <th>{props.issue.created ? props.issue.created.toDateString() : ''}</th>
+        <th>{props.issue.effort}</th>
+        <th>{props.issue.completionDate ? props.issue.completionDate.toDateString() : ''}</th>
+        <th>{props.issue.title}</th>
     </tr>
 )
 

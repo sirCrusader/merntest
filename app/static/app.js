@@ -13,6 +13,15 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
  */
 
 var contentNode = document.getElementById('contents');
+var issues = [{
+    id: 1, status: 'Open', owner: 'Ravan',
+    created: new Date('2016-08-15'), effort: 5, completionDate: undefined,
+    title: 'Error in console when clicking Add'
+}, {
+    id: 2, status: 'Assigned', owner: 'Eddie',
+    created: new Date('2016-08-16'), effort: 14, completionDate: new Date('2016-08-30'),
+    title: 'Missing bottom border on panel'
+}];
 
 var IssueFilter = function (_React$Component) {
     _inherits(IssueFilter, _React$Component);
@@ -49,36 +58,46 @@ var IssueRow = function (_React$Component2) {
     _createClass(IssueRow, [{
         key: 'render',
         value: function render() {
-            var borderedStyle = { border: "1px solid silver", padding: 4 };
+            var issue = this.props.issue;
             return React.createElement(
                 'tr',
                 null,
                 React.createElement(
-                    'td',
-                    { style: borderedStyle },
-                    this.props.issue_id
+                    'th',
+                    null,
+                    issue.id
                 ),
                 React.createElement(
-                    'td',
-                    { style: borderedStyle },
-                    this.props.children
+                    'th',
+                    null,
+                    issue.status
+                ),
+                React.createElement(
+                    'th',
+                    null,
+                    issue.owner
+                ),
+                React.createElement(
+                    'th',
+                    null,
+                    issue.created.toDateString()
+                ),
+                React.createElement(
+                    'th',
+                    null,
+                    issue.effort
+                ),
+                React.createElement(
+                    'th',
+                    null,
+                    issue.completionDate ? issue.completionDate.toDateString() : ''
+                ),
+                React.createElement(
+                    'th',
+                    null,
+                    issue.title
                 )
             );
-        }
-    }], [{
-        key: 'propTypes',
-        get: function get() {
-            return {
-                issue_id: React.PropTypes.number.isRequired,
-                issue_title: React.PropTypes.string
-            };
-        }
-    }, {
-        key: 'defaultProps',
-        get: function get() {
-            return {
-                issue_title: '-- no title --'
-            };
         }
     }]);
 
@@ -97,10 +116,12 @@ var IssueTable = function (_React$Component3) {
     _createClass(IssueTable, [{
         key: 'render',
         value: function render() {
-            var borderedStyle = { border: "1px solid silver", padding: 6 };
+            var issueRows = this.props.issues.map(function (issue) {
+                return React.createElement(IssueRow, { key: issue.id, issue: issue });
+            });
             return React.createElement(
                 'table',
-                { style: { borderCollapse: "collapse" } },
+                { className: 'bordered-table' },
                 React.createElement(
                     'thead',
                     null,
@@ -108,13 +129,38 @@ var IssueTable = function (_React$Component3) {
                         'tr',
                         null,
                         React.createElement(
-                            'td',
-                            { style: borderedStyle },
+                            'th',
+                            null,
                             'Id'
                         ),
                         React.createElement(
-                            'td',
-                            { style: borderedStyle },
+                            'th',
+                            null,
+                            'Status'
+                        ),
+                        React.createElement(
+                            'th',
+                            null,
+                            'Owner'
+                        ),
+                        React.createElement(
+                            'th',
+                            null,
+                            'Created'
+                        ),
+                        React.createElement(
+                            'th',
+                            null,
+                            'Effort'
+                        ),
+                        React.createElement(
+                            'th',
+                            null,
+                            'Completion Date'
+                        ),
+                        React.createElement(
+                            'th',
+                            null,
                             'Title'
                         )
                     )
@@ -122,22 +168,7 @@ var IssueTable = function (_React$Component3) {
                 React.createElement(
                     'tbody',
                     null,
-                    React.createElement(
-                        IssueRow,
-                        { issue_id: 1 },
-                        'Error in console when clicking Add'
-                    ),
-                    React.createElement(
-                        IssueRow,
-                        { issue_id: 2 },
-                        'Missing bottom ',
-                        React.createElement(
-                            'b',
-                            null,
-                            'border'
-                        ),
-                        ' on panel'
-                    )
+                    issueRows
                 )
             );
         }
@@ -175,10 +206,46 @@ var IssueList = function (_React$Component5) {
     function IssueList() {
         _classCallCheck(this, IssueList);
 
-        return _possibleConstructorReturn(this, (IssueList.__proto__ || Object.getPrototypeOf(IssueList)).apply(this, arguments));
+        var _this5 = _possibleConstructorReturn(this, (IssueList.__proto__ || Object.getPrototypeOf(IssueList)).call(this));
+
+        _this5.state = { issues: [] };
+
+        _this5.createTestIssue = _this5.createTestIssue.bind(_this5);
+        setTimeout(_this5.createTestIssue, 2000);
+        return _this5;
     }
 
     _createClass(IssueList, [{
+        key: 'componentDidMount',
+        value: function componentDidMount() {
+            this.loadData();
+        }
+    }, {
+        key: 'loadData',
+        value: function loadData() {
+            var _this6 = this;
+
+            setTimeout(function () {
+                _this6.setState({ issues: issues });
+            }, 2000);
+        }
+    }, {
+        key: 'createIssue',
+        value: function createIssue(newIssue) {
+            var newIssues = this.state.issues.slice();
+            newIssue.id = this.state.issues.length + 1;
+            newIssues.push(newIssue);
+            this.setState({ issues: newIssues });
+        }
+    }, {
+        key: 'createTestIssue',
+        value: function createTestIssue() {
+            this.createIssue({
+                status: 'New', owner: 'Pieta', created: new Date(),
+                title: 'Completion date should be optional'
+            });
+        }
+    }, {
         key: 'render',
         value: function render() {
             return React.createElement(
@@ -191,7 +258,12 @@ var IssueList = function (_React$Component5) {
                 ),
                 React.createElement(IssueFilter, null),
                 React.createElement('hr', null),
-                React.createElement(IssueTable, null),
+                React.createElement(IssueTable, { issues: this.state.issues }),
+                React.createElement(
+                    'button',
+                    { onClick: this.createTestIssue },
+                    'Add'
+                ),
                 React.createElement('hr', null),
                 React.createElement(IssueAdd, null)
             );

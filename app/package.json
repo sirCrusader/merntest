@@ -27,7 +27,8 @@
   },
   "homepage": "https://github.com/vasansr/pro-mern-stack#readme",
   "dependencies": {
-    "express": "4.9.0"
+    "express": "4.9.0",
+    "body-parser": "1.17.2"
   },
   "devDependencies": {
     "babel-cli": "^6.11.4",

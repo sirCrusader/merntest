@@ -3,6 +3,8 @@ FROM node:6.10.2
 RUN mkdir /src
 
 RUN npm install nodemon -g
+RUN npm install co
+RUN npm install async
 
 WORKDIR /src
 ADD app/package.json /src/package.json

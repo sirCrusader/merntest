@@ -14,7 +14,7 @@ class IssueFilter extends React.Component {
 
 const IssueRow = (props) => (
     <tr>
-        <th>{props.issue.id}</th>
+        <th>{props.issue._id}</th>
         <th>{props.issue.status}</th>
         <th>{props.issue.owner}</th>
         <th>{props.issue.created ? props.issue.created.toDateString() : ''}</th>
@@ -25,7 +25,7 @@ const IssueRow = (props) => (
 )
 
 function IssueTable(props) {
-    const issueRows = props.issues.map(issue => <IssueRow key={issue.id} issue={issue} />)
+    const issueRows = props.issues.map(issue => <IssueRow key={issue._id} issue={issue} />)
     return (
         <table className="bordered-table">
             <thead>
@@ -92,20 +92,26 @@ class IssueList extends React.Component {
     }
 
     loadData() {
-        fetch('/api/issues').then(response =>
-            response.json()
-        ).then(data => {
-            console.log("Total count of records: ", data.metadata.total_count);
-            data.records.forEach(issue => {
-                issue.created = new Date(issue.created);
-                if (issue.completionDate) {
-                    issue.completionDate = new Date(issue.completionDate);
+        fetch('/api/issues').then(response => {
+                if (response.ok) {
+                    response.json().then(data => {
+                        console.log("Total count of records: ", data._metadata.total_count);
+                        data.records.forEach(issue => {
+                            issue.created = new Date(issue.created);
+                            if (issue.completionDate) {
+                                issue.completionDate = new Date(issue.completionDate);
+                            }
+                        });
+                        this.setState({issues: data.records});
+                    });
+                } else {
+                    response.json().then(error => {
+                        alert("Failed to fetch issues: " + error.message);
+                    });
                 }
+            }).catch(err => {
+                alert("Error in fetching data from server: ", err);
             });
-            this.setState({ issues: data.records });
-        }).catch(err => {
-            console.log(err);
-        });
     }
 
     createIssue(newIssue) {

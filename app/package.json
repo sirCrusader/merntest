@@ -4,8 +4,8 @@
   "description": "Pro MERN Stack",
   "main": "index.js",
   "scripts": {
-    "compile": "babel app/source --presets react,es2015 --out-dir app/static",
-    "watch": "babel app/source --presets react,es2015 --out-dir app/static --watch",
+    "compile": "node_modules/.bin/webpack app/webpack.config.js",
+    "watch": "node_modules/.bin/webpack app/webpack.config.js --watch",
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "nodemon -L app/server/server.js"
   },

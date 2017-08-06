@@ -15,6 +15,6 @@ ADD app/webpack.config.js /src/webpack.config.js
 
 EXPOSE 3000
 
-CMD npm start
+CMD npm run dev-hook-all
 
 #npm run watch

@@ -2,7 +2,7 @@ const webpack = require('webpack');
 
 module.exports = {
     entry: {
-        app: '/src/app/source/app.jsx',
+        app: ['/src/app/source/app.jsx'],
         vendor: ['react','react-dom','whatwg-fetch','babel-polyfill'],
     },
     output: {
@@ -22,5 +22,15 @@ module.exports = {
                 }
             },
         ]
-    }
+    },
+    devServer: {
+        port: 8000,
+        contentBase: 'static',
+        proxy: {
+            '/api/*': {
+                target: 'http://172.17.0.3:3000'
+            }
+        }
+    },
+    devtool: 'source-map'
 };

@@ -1,12 +1,17 @@
 import React from 'react';
 import 'whatwg-fetch';
+import { Link } from 'react-router';
 
 import IssueAdd from './IssueAdd.jsx';
 import IssueFilter from './IssueFilter.jsx';
 
 const IssueRow = (props) => (
     <tr>
-        <th>{props.issue._id}</th>
+        <th>
+            <Link to={`/issues/${props.issue._id}`}>
+                {props.issue._id.substr(-4)}
+            </Link>
+        </th>
         <th>{props.issue.status}</th>
         <th>{props.issue.owner}</th>
         <th>{props.issue.created ? props.issue.created.toDateString() : ''}</th>
@@ -44,14 +49,24 @@ export default class IssueList extends React.Component {
         this.state = { issues: [] };
 
         this.createIssue = this.createIssue.bind(this);
+        this.setFilter = this.setFilter.bind(this);
     }
 
-    componentDidMount() {
+    setFilter(query) {
+        this.props.router.push({ pathname: this.props.location.pathname, query });
+    }
+
+    componentDidMount(prevProps) {
+        const oldQuery = prevProps.location.query;
+        const newQuery = this.props.location.query;
+        if (oldQuery.status === newQuery.status) {
+            return;
+        }
         this.loadData();
     }
 
     loadData() {
-        fetch('/api/issues').then(response => {
+        fetch(`/api/issues${this.props.location.search}`).then(response => {
             if (response.ok) {
                 response.json().then(data => {
                     console.log("Total count of records: ", data._metadata.total_count);
@@ -102,7 +117,7 @@ export default class IssueList extends React.Component {
         return (
             <div>
                 <h1>Issue Tracker</h1>
-                <IssueFilter/>
+                <IssueFilter setFilter={this.setFilter} />
                 <hr />
                 <IssueTable issues={this.state.issues} />
                 <hr />
@@ -111,3 +126,8 @@ export default class IssueList extends React.Component {
         );
     }
 }
+
+IssueList.propTypes = {
+    location: React.PropTypes.object.isRequired,
+    router: React.PropTypes.object,
+};

@@ -10,6 +10,7 @@ import express from 'express';
 import bodyParser from 'body-parser';
 import { MongoClient } from 'mongodb';
 import Issue from './issue.js';
+import path from 'path';
 
 
 const app = express();
@@ -41,7 +42,9 @@ MongoClient.connect('mongodb://172.17.0.2/issuetracker').then(connection => {
     console.log('Error: ', error);
 });
 
-
+app.get('*', (req, res) => {
+    res.sendFile(path.resolve('static/index.html'));
+});
 
 app.get('/api/issues', (req, res) => {
     const filter = {};
